@@ -1,0 +1,22 @@
+{
+  "include": [ "src" ],
+  "exclude": [ "src/examples" ],
+
+  "compilerOptions": {
+    "outDir": "dist",
+
+    "lib": [ "esnext" ],
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+
+    "strict": true,
+    "declaration": true,
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}

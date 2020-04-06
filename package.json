@@ -1,0 +1,54 @@
+{
+  "name": "@type-schema/json-schema",
+  "version": "0.0.0",
+  "description": "Full TypeScript typed collection of JSON Schema drafts & Ts-Extras meta-schema drafts",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "compile": "tsc",
+    "build": "npm run clean && npm run compile",
+    "-------------": "-------------",
+    "test": "jest",
+    "test:coverage": "jest --collect-coverage",
+    "clean": "rimraf coverage dist && npm run clean:buildinfo",
+    "clean:buildinfo": "rimraf ./**/tsconfig.tsbuildinfo",
+    "-------------   ": "-------------",
+    "prepublishOnly": "npm run build",
+    "preversion": "npm test && npm run build",
+    "version": "git add package.json"
+  },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "dist"
+  ],
+  "author": {
+    "name": "Ron S.",
+    "email": "ron@nonara.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:type-schema/json-schema.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ts",
+    "typescript",
+    "json",
+    "schema",
+    "jsonschema",
+    "json-schema",
+    "ts-extras",
+    "type-schema",
+    "typeschema"
+  ],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.8.3"
+  }
+}
