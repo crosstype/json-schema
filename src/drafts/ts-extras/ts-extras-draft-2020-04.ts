@@ -1,80 +1,83 @@
-import { IJsonSchemaDraft, ITsExtrasDraft } from '../schema-draft';
+import { TypeOnly, validateTsExtrasDraft } from '../schema-draft';
+import { WideJsonDefinitionWithExtras } from '../../index';
 
 
 /* ****************************************************************************************************************** */
-// TSJsonSchema
+// Draft
 /* ****************************************************************************************************************** */
+/* Type-check the namespace against the JsonSchemaDraft interface */
+type check = validateTsExtrasDraft<typeof Draft2020_04>
 
-/**
- * @see core/resources/type-schema-draft-01-example.ts
- */
-export abstract class TsExtrasDraft_2020_04<TDraft extends IJsonSchemaDraft> implements ITsExtrasDraft {
-  title = 'TS-EXTRAS';
-  version = '2020_04';
-  URI = ''; // TODO - Publish & set
+export namespace Draft2020_04 {
+  export const title = 'Ts-Extras';
+  export const version = '2020_04';
+  export const URI = ''; // TODO - TBD
 
-  tsTypes = [ 'interface', 'class', 'object', 'type', 'method', 'function' ] as const;
+  export const tsTypes = [ 'interface', 'class', 'object', 'type', 'method', 'function' ] as const;
 
-  /* ********************************************************* */
-  // region: Types
-  /* ********************************************************* */
+  export type TsType = typeof tsTypes[number];
 
-  abstract TsType: this['tsTypes'][number];
+  export interface TypeParameter<TDefinition = WideJsonDefinitionWithExtras> {
+    constraint?: TDefinition
+    default?: TDefinition
+    value?: TDefinition
+  }
 
-  abstract TypeParameter: {
-    constraint?: TDraft['JsonDefinition']
-    default?: TDraft['JsonDefinition']
-    value?: TDraft['JsonDefinition']
-  };
-
-  abstract FunctionParameter: {
+  export interface FunctionParameter<TDefinition = WideJsonDefinitionWithExtras> {
     name?: string
-    type: TDraft['JsonDefinition']
+    type: TDefinition
     optional?: boolean
-  };
+  }
 
-  abstract FunctionSignature: {
+  export interface FunctionSignature<TDefinition = WideJsonDefinitionWithExtras> {
     name?: string
-    parameters: Array<TsExtrasDraft_2020_04<TDraft>['FunctionParameter']>
-    returnType: TDraft['JsonDefinition']
-    restParameter?: TsExtrasDraft_2020_04<TDraft>['FunctionParameter']
-  };
+    parameters: Array<FunctionParameter<TDefinition>>
+    returnType: TDefinition
+    restParameter?: FunctionParameter<TDefinition>
+  }
 
-  abstract Schema: TsExtras_2020_04<TDraft>
+  /* ********************************************************* *
+   * Placeholders
+   * ********************************************************* */
+  export const TsType: TsType = TypeOnly;
+  export const TypeParameter: TypeParameter = TypeOnly;
+  export const FunctionParameter: FunctionParameter = TypeOnly;
+  export const FunctionSignature: FunctionSignature = TypeOnly;
+  export const Schema: Schema = TypeOnly;
 
-  // endregion
-}
+  /* ********************************************************* *
+   * Schema
+   * ********************************************************* */
+  export interface Schema<TDefinition = WideJsonDefinitionWithExtras> {
+    $tsType?: TsType
 
+    /**
+     * $tsType: 'interface' | 'class'
+     * Array of references
+     */
+    $heritageObjects?: Array<this>
 
-export interface TsExtras_2020_04<TDraft extends IJsonSchemaDraft> {
-  $tsType?: TsExtrasDraft_2020_04<TDraft>['TsType']
+    /**
+     * $tsType: 'interface' | 'class' | 'object' | 'type' | 'method' | 'function'
+     * Values make use of and $extends, default, supplied value is in value root
+     */
+    $typeParameters?: Record<string, TypeParameter<TDefinition>>
 
-  /**
-   * $tsType: 'interface' | 'class'
-   * Array of references
-   */
-  $heritageObjects?: Array<this>
+    /**
+     * $tsType: 'method' | 'function'
+     */
+    $functionSignature?: FunctionSignature<TDefinition>
 
-  /**
-   * $tsType: 'interface' | 'class' | 'object' | 'type' | 'method' | 'function'
-   * Values make use of and $extends, default, supplied value is in value root
-   */
-  $typeParameters?: Record<string, TsExtrasDraft_2020_04<TDraft>['TypeParameter']>
+    /**
+     * 'object' type
+     * Keys (properties & methods) in object
+     */
+    keyOrder?: string[]
 
-  /**
-   * $tsType: 'method' | 'function'
-   */
-  $functionSignature?: TsExtrasDraft_2020_04<TDraft>['FunctionSignature']
-
-  /**
-   * 'object' type
-   * Keys (properties & methods) in object
-   */
-  keyOrder?: string[]
-
-  /**
-   * 'object' type
-   * Keys (properties & methods) in object
-   */
-  methods?: Record<string, this & Pick<Required<this>, '$functionSignature'> & { $tsType: 'method' }>
+    /**
+     * 'object' type
+     * Keys (properties & methods) in object
+     */
+    methods?: Record<string, this & Pick<Required<this>, '$functionSignature'> & { $tsType: 'method' }>
+  }
 }

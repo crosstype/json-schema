@@ -1,6 +1,6 @@
 {
   "include": [ "src" ],
-  "exclude": [ "src/examples" ],
+  "exclude": [ "src/examples", "dist" ],
 
   "compilerOptions": {
     "outDir": "dist",

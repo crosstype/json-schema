@@ -1,11 +1,27 @@
-import { NullableJsonObject } from '../basic-json';
+/* ****************************************************************************************************************** */
+// region: Helpers & Constants
+/* ****************************************************************************************************************** */
+
+import { TsExtras } from '../index';
+
+
+/**
+ * Serves as placeholder value for type-only based draft namespaces (allows accessing types using typeof <draft>)
+ */
+export const TypeOnly: any = Symbol('Type Only (placeholder)');
+
+/* The following types are used simply to provide type-checker diagnostics if namespace violates the interface structure */
+export type validateJsonSchemaDraft<T extends JsonSchemaDraft> = T
+export type validateTsExtrasDraft<T extends TsExtrasDraft> = T
+
+// endregion
 
 
 /* ****************************************************************************************************************** */
 // region: Base Interfaces
 /* ****************************************************************************************************************** */
 
-interface SchemaDraft {
+export interface SchemaDraft {
   title: string
   version: string
   URI: string
@@ -16,9 +32,10 @@ interface SchemaDraft {
   Schema: any
 }
 
-export interface IJsonSchemaDraft extends SchemaDraft {
+export interface JsonSchemaDraft extends SchemaDraft {
   typeNames: readonly string[]
   primitiveTypeNames: readonly string[]
+  SchemaWithExtras: Record<keyof typeof TsExtras, any>
 
   /**
    * Type Only
@@ -28,21 +45,16 @@ export interface IJsonSchemaDraft extends SchemaDraft {
   JsonDefinition: any
 }
 
-export interface ITsExtrasDraft extends SchemaDraft {
+export interface TsExtrasDraft extends SchemaDraft {
   tsTypes: readonly string[]
 
   /**
    * Type Only
    */
   TsType: string
-  TypeParameter: NullableJsonObject
-  FunctionParameter: NullableJsonObject
-  FunctionSignature: NullableJsonObject
-}
-
-export interface DraftCollection {
-  [p:string]: any
-  latest: any
+  TypeParameter: object
+  FunctionParameter: object
+  FunctionSignature: object
 }
 
 // endregion
