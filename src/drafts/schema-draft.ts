@@ -1,9 +1,9 @@
+import { TsExtrasDrafts } from '../index';
+
+
 /* ****************************************************************************************************************** */
 // region: Helpers & Constants
 /* ****************************************************************************************************************** */
-
-import { TsExtras } from '../index';
-
 
 /**
  * Serves as placeholder value for type-only based draft namespaces (allows accessing types using typeof <draft>)
@@ -35,7 +35,7 @@ export interface SchemaDraft {
 export interface JsonSchemaDraft extends SchemaDraft {
   typeNames: readonly string[]
   primitiveTypeNames: readonly string[]
-  SchemaWithExtras: Record<keyof typeof TsExtras, any>
+  SchemaWithExtras: Record<keyof typeof TsExtrasDrafts, any>
 
   /**
    * Type Only

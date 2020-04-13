@@ -12,7 +12,7 @@
 import { TypeOnly, validateJsonSchemaDraft } from '../schema-draft';
 import { NullableNonArrayJsonValue } from '../../basic-json';
 import { OneOrMore } from '../../helpers';
-import { TsExtras } from '../../index';
+import { TsExtrasDrafts } from '../../index';
 
 
 /* ****************************************************************************************************************** *
@@ -46,7 +46,7 @@ export namespace Draft2019_09 {
    * Schema
    * ********************************************************* */
   export namespace SchemaWithExtras {
-    export interface Draft2020_04 extends Schema, TsExtras.Draft2020_04.Schema<JsonDefinition<Draft2020_04>> { }
+    export interface Draft2020_04 extends Schema, TsExtrasDrafts.Draft2020_04.Schema<JsonDefinition<Draft2020_04>> { }
     export type Latest = Draft2020_04
 
     export const Draft2020_04: Draft2020_04 = TypeOnly;
@@ -84,7 +84,7 @@ export namespace Draft2019_09 {
      * @new
      * @see https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.8.2.5
      */
-    $defs?: Record<string, JsonDefinition<this>>
+    $defs?: Record<string, JsonDefinition<Partial<this>>>
 
 
     /**
@@ -106,23 +106,23 @@ export namespace Draft2019_09 {
      * Sub-schema Conditionals
      * @see https://json-schema.org/draft/2019-09/json-schema-core.html#conditional
      */
-    if?: JsonDefinition<this>
-    then?: JsonDefinition<this>;
-    else?: JsonDefinition<this>;
+    if?: JsonDefinition<Partial<this>>
+    then?: JsonDefinition<Partial<this>>;
+    else?: JsonDefinition<Partial<this>>;
     /**
      * @new
      */
-    dependentSchemas?: Record<string, JsonDefinition<this>>
+    dependentSchemas?: Record<string, JsonDefinition<Partial<this>>>
 
 
     /**
      * Sub-schema Boolean Logic
      * @see https://json-schema.org/draft/2019-09/json-schema-core.html#logic
      */
-    allOf?: JsonDefinition<this>[];
-    anyOf?: JsonDefinition<this>[];
-    oneOf?: JsonDefinition<this>[];
-    not?: JsonDefinition<this>;
+    allOf?: JsonDefinition<Partial<this>>[];
+    anyOf?: JsonDefinition<Partial<this>>[];
+    oneOf?: JsonDefinition<Partial<this>>[];
+    not?: JsonDefinition<Partial<this>>;
 
 
     /**
@@ -159,16 +159,16 @@ export namespace Draft2019_09 {
      * @see https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.4
      * @see https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.9.3.1
      */
-    items?: OneOrMore<JsonDefinition<this>>;
-    additionalItems?: JsonDefinition<this>;
+    items?: OneOrMore<JsonDefinition<Partial<this>>>;
+    additionalItems?: JsonDefinition<Partial<this>>;
     maxItems?: number;
     minItems?: number;
     uniqueItems?: boolean;
-    contains?: this;
+    contains?: Partial<this>;
     /**
      * @new
      */
-    unevaluatedItems?: JsonDefinition<this>;
+    unevaluatedItems?: JsonDefinition<Partial<this>>;
     /**
      * @new
      */
@@ -187,21 +187,21 @@ export namespace Draft2019_09 {
     maxProperties?: number;
     minProperties?: number;
     required?: string[];
-    additionalProperties?: JsonDefinition<this>;
-    propertyNames?: JsonDefinition<this>;
+    additionalProperties?: JsonDefinition<Partial<this>>;
+    propertyNames?: JsonDefinition<Partial<this>>;
     /**
      * @new
      */
-    unevaluatedProperties?: JsonDefinition<this>;
+    unevaluatedProperties?: JsonDefinition<Partial<this>>;
     /**
      * @new
      */
     dependentRequired?: {
       [key: string]: string[]
     }
-    properties?: Record<string, JsonDefinition<this>>
-    patternProperties?: Record<string, JsonDefinition<this>>
-    dependencies?: Record<string, JsonDefinition<this> | string[]>
+    properties?: Record<string, JsonDefinition<Partial<this>>>
+    patternProperties?: Record<string, JsonDefinition<Partial<this>>>
+    dependencies?: Record<string, JsonDefinition<Partial<this>> | string[]>
 
 
     /**
@@ -213,7 +213,7 @@ export namespace Draft2019_09 {
     /**
      * @new
      */
-    contentSchema?: JsonDefinition<this>;
+    contentSchema?: JsonDefinition<Partial<this>>;
 
 
     /**
@@ -233,6 +233,6 @@ export namespace Draft2019_09 {
      * Deprecated (Still valid)
      * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-02#appendix-A
      */
-    definitions?: Record<string, JsonDefinition<this>>
+    definitions?: Record<string, JsonDefinition<Partial<this>>>
   }
 }

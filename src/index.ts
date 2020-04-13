@@ -1,29 +1,71 @@
-import * as JsonSchema from './drafts/json'
-import * as TsExtras from './drafts/ts-extras'
+import * as JsonSchemaDrafts from './drafts/json'
+import * as TsExtrasDrafts from './drafts/ts-extras'
 import { JsonValue } from './basic-json';
+import { MergeUnions } from './helpers';
 
 
 /* ****************************************************************************************************************** *
- * Drafts & Types
+ * Drafts & Basic Types
  * ****************************************************************************************************************** */
+
 export * from './basic-json'
+export { JsonSchemaDrafts, TsExtrasDrafts }
 
-export { JsonSchema, TsExtras }
 
-export type WideJsonDefinition = typeof JsonSchema[keyof typeof JsonSchema]['JsonDefinition']
-export type WideJsonDefinitionWithExtras = Exclude<WideJsonDefinition, WideJsonSchema> | WideJsonSchemaWithExtras
+/* ****************************************************************************************************************** *
+ * Unions
+ * ****************************************************************************************************************** */
 
-export type WideJsonSchema = { [K in keyof typeof JsonSchema]: typeof JsonSchema[K]['Schema'] }[keyof typeof JsonSchema]
-export type WideJsonSchemaWithExtras = {
-  [K in keyof typeof JsonSchema]: {
-    [K2 in keyof typeof JsonSchema[K]['SchemaWithExtras']]: typeof JsonSchema[K]['SchemaWithExtras'][K2]
-  }[keyof typeof JsonSchema[K]['SchemaWithExtras']]
-}[keyof typeof JsonSchema]
+/**
+ * Union of all JsonDefinition from Json Schema
+ */
+export type JsonDefinition = typeof JsonSchemaDrafts[keyof typeof JsonSchemaDrafts]['JsonDefinition']
+/**
+ * Union of all JsonDefinition from Json Schema (includes all TsExtras)
+ */
+export type JsonDefinitionWithExtras = Exclude<JsonDefinition, JsonSchema> | JsonSchemaWithExtras
+
+/**
+ * Union of all Json Schema
+ */
+export type JsonSchema = { [K in keyof typeof JsonSchemaDrafts]: typeof JsonSchemaDrafts[K]['Schema'] }[keyof typeof JsonSchemaDrafts]
+/**
+ * Union of all Json Schema (includes all TsExtras)
+ */
+export type JsonSchemaWithExtras = {
+  [K in keyof typeof JsonSchemaDrafts]: {
+    [K2 in keyof typeof JsonSchemaDrafts[K]['SchemaWithExtras']]: typeof JsonSchemaDrafts[K]['SchemaWithExtras'][K2]
+  }[keyof typeof JsonSchemaDrafts[K]['SchemaWithExtras']]
+}[keyof typeof JsonSchemaDrafts]
+
+
+
+/* ****************************************************************************************************************** *
+ * Intersections
+ * ****************************************************************************************************************** */
+
+/**
+ * Intersection of all JsonDefinition from Json Schema
+ */
+export type WideJsonDefinition = MergeUnions<JsonDefinition>
+/**
+ * Intersection of all JsonDefinition from Json Schema (includes all TsExtras)
+ */
+export type WideJsonDefinitionWithExtras = MergeUnions<JsonDefinitionWithExtras>
+/**
+ * Intersection of all Json Schema
+ */
+export type WideJsonSchema = MergeUnions<JsonSchema>
+/**
+ * Intersection of all Json Schema (includes all TsExtras)
+ */
+export type WideJsonSchemaWithExtras = MergeUnions<JsonSchemaWithExtras>
 
 
 /* ****************************************************************************************************************** *
  * Utilities
  * ****************************************************************************************************************** */
+
 /**
  * Allow additional properties on TSchema, provided their values are valid JSON values
  * @param TSchema Schema or JsonDefinition

@@ -55,7 +55,7 @@ export namespace Draft2020_04 {
      * $tsType: 'interface' | 'class'
      * Array of references
      */
-    $heritageObjects?: Array<this>
+    $heritageObjects?: Array<Partial<this>>
 
     /**
      * $tsType: 'interface' | 'class' | 'object' | 'type' | 'method' | 'function'
@@ -78,6 +78,6 @@ export namespace Draft2020_04 {
      * 'object' type
      * Keys (properties & methods) in object
      */
-    methods?: Record<string, this & Pick<Required<this>, '$functionSignature'> & { $tsType: 'method' }>
+    methods?: Record<string, Partial<this> & Pick<Required<this>, '$functionSignature'> & { $tsType: 'method' }>
   }
 }

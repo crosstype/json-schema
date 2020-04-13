@@ -11,7 +11,7 @@
 import { TypeOnly, validateJsonSchemaDraft } from '../schema-draft';
 import { NullableNonArrayJsonValue } from '../../basic-json';
 import { OneOrMore } from '../../helpers';
-import { TsExtras } from '../../index';
+import { TsExtrasDrafts } from '../../index';
 
 
 /* ****************************************************************************************************************** *
@@ -44,7 +44,7 @@ export namespace Draft7 {
    * Schema
    * ********************************************************* */
   export namespace SchemaWithExtras {
-    export interface Draft2020_04 extends Schema, TsExtras.Draft2020_04.Schema<JsonDefinition<Draft2020_04>> { }
+    export interface Draft2020_04 extends Schema, TsExtrasDrafts.Draft2020_04.Schema<JsonDefinition<Draft2020_04>> { }
     export type Latest = Draft2020_04
 
     export const Draft2020_04: Draft2020_04 = TypeOnly;
@@ -95,12 +95,12 @@ export namespace Draft7 {
     /**
      * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.4
      */
-    items?: OneOrMore<JsonDefinition<this>>;
-    additionalItems?: JsonDefinition<this>;
+    items?: OneOrMore<JsonDefinition<Partial<this>>>;
+    additionalItems?: JsonDefinition<Partial<this>>;
     maxItems?: number;
     minItems?: number;
     uniqueItems?: boolean;
-    contains?: this;
+    contains?: Partial<this>;
 
     /**
      * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.5
@@ -108,26 +108,26 @@ export namespace Draft7 {
     maxProperties?: number;
     minProperties?: number;
     required?: string[];
-    properties?: Record<string, JsonDefinition<this>>;
-    patternProperties?: Record<string, JsonDefinition<this>>
-    additionalProperties?: Record<string, JsonDefinition<this>>
-    dependencies?: Record<string, JsonDefinition<this> | string[]>
-    propertyNames?: JsonDefinition<this>;
+    properties?: Record<string, JsonDefinition<Partial<this>>>;
+    patternProperties?: Record<string, JsonDefinition<Partial<this>>>
+    additionalProperties?: Record<string, JsonDefinition<Partial<this>>>
+    dependencies?: Record<string, JsonDefinition<Partial<this>> | string[]>
+    propertyNames?: JsonDefinition<Partial<this>>;
 
     /**
      * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.6
      */
-    if?: JsonDefinition<this>;
-    then?: JsonDefinition<this>;
-    else?: JsonDefinition<this>;
+    if?: JsonDefinition<Partial<this>>;
+    then?: JsonDefinition<Partial<this>>;
+    else?: JsonDefinition<Partial<this>>;
 
     /**
      * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.7
      */
-    allOf?: JsonDefinition<this>[];
-    anyOf?: JsonDefinition<this>[];
-    oneOf?: JsonDefinition<this>[];
-    not?: JsonDefinition<this>;
+    allOf?: JsonDefinition<Partial<this>>[];
+    anyOf?: JsonDefinition<Partial<this>>[];
+    oneOf?: JsonDefinition<Partial<this>>[];
+    not?: JsonDefinition<Partial<this>>;
 
     /**
      * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-7
@@ -143,7 +143,7 @@ export namespace Draft7 {
     /**
      * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-9
      */
-    definitions?: Record<string, this | boolean>
+    definitions?: Record<string, Partial<this> | boolean>
 
     /**
      * @see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-10
