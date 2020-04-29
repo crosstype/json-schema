@@ -1,12 +1,14 @@
-import { TypeOnly, validateTsExtrasDraft } from '../schema-draft';
-import { WideJsonDefinitionWithExtras } from '../../index';
+import { TypeOnly, validateTsExtrasDraft, validateWide } from '../schema-draft';
+// noinspection ES6PreferShortImport
+import { JsonWithExtrasWide } from '../../index';
+import { RequireSome } from '../../helpers';
 
 
 /* ****************************************************************************************************************** */
 // Draft
 /* ****************************************************************************************************************** */
 /* Type-check the namespace against the JsonSchemaDraft interface */
-type check = validateTsExtrasDraft<typeof Draft2020_04>
+type check = validateTsExtrasDraft<typeof Draft2020_04> | validateWide<typeof Draft2020_04>
 
 export namespace Draft2020_04 {
   export const title = 'Ts-Extras';
@@ -17,19 +19,19 @@ export namespace Draft2020_04 {
 
   export type TsType = typeof tsTypes[number];
 
-  export interface TypeParameter<TDefinition = WideJsonDefinitionWithExtras> {
+  export interface TypeParameter<TDefinition = JsonWithExtrasWide.JsonDefinition> {
     constraint?: TDefinition
     default?: TDefinition
     value?: TDefinition
   }
 
-  export interface FunctionParameter<TDefinition = WideJsonDefinitionWithExtras> {
+  export interface FunctionParameter<TDefinition = JsonWithExtrasWide.JsonDefinition> {
     name?: string
     type: TDefinition
     optional?: boolean
   }
 
-  export interface FunctionSignature<TDefinition = WideJsonDefinitionWithExtras> {
+  export interface FunctionSignature<TDefinition = JsonWithExtrasWide.JsonDefinition> {
     name?: string
     parameters: Array<FunctionParameter<TDefinition>>
     returnType: TDefinition
@@ -48,7 +50,7 @@ export namespace Draft2020_04 {
   /* ********************************************************* *
    * Schema
    * ********************************************************* */
-  export interface Schema<TDefinition = WideJsonDefinitionWithExtras> {
+  export interface Schema<TDefinition = JsonWithExtrasWide.JsonDefinition> {
     $tsType?: TsType
 
     /**
