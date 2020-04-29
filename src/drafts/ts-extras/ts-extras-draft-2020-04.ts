@@ -15,8 +15,7 @@ export namespace Draft2020_04 {
   export const version = '2020_04';
   export const URI = ''; // TODO - TBD
 
-  export const tsTypes = [ 'interface', 'class', 'object', 'type', 'method', 'function' ] as const;
-
+  export const tsTypes = [ 'interface', 'class', 'type', 'function', 'method' ] as const;
   export type TsType = typeof tsTypes[number];
 
   export interface TypeParameter<TDefinition = JsonWithExtrasWide.JsonDefinition> {
@@ -26,15 +25,15 @@ export namespace Draft2020_04 {
   }
 
   export interface FunctionParameter<TDefinition = JsonWithExtrasWide.JsonDefinition> {
-    name?: string
+    name: string
     type: TDefinition
     optional?: boolean
   }
 
   export interface FunctionSignature<TDefinition = JsonWithExtrasWide.JsonDefinition> {
     name?: string
-    parameters: Array<FunctionParameter<TDefinition>>
-    returnType: TDefinition
+    parameters?: Array<FunctionParameter<TDefinition>>
+    returnType?: TDefinition
     restParameter?: FunctionParameter<TDefinition>
   }
 
@@ -54,32 +53,40 @@ export namespace Draft2020_04 {
     $tsType?: TsType
 
     /**
-     * $tsType: 'interface' | 'class'
      * Array of references
+     * Valid for:
+     *   $tsType: 'interface' | 'class'
      */
     $heritageObjects?: Array<Partial<this>>
 
     /**
-     * $tsType: 'interface' | 'class' | 'object' | 'type' | 'method' | 'function'
      * Values make use of and $extends, default, supplied value is in value root
+     * Valid for:
+     *   $tsType: 'interface' | 'class' | 'type' | 'function' | 'method'
      */
     $typeParameters?: Record<string, TypeParameter<TDefinition>>
 
     /**
-     * $tsType: 'method' | 'function'
+     * Function signature
+     * Valid for:
+     *   $tsType: 'function' | 'method'
      */
     $functionSignature?: FunctionSignature<TDefinition>
 
     /**
-     * 'object' type
-     * Keys (properties & methods) in object
+     * Order of keys (properties & methods) in object
+     * Valid for:
+     *   $tsType: 'interface' | 'class'
+     *   type: 'object'
      */
     keyOrder?: string[]
 
     /**
-     * 'object' type
-     * Keys (properties & methods) in object
+     *
+     * Valid for:
+     *   $tsType: 'interface' | 'class'
+     *   type: 'object'
      */
-    methods?: Record<string, Partial<this> & Pick<Required<this>, '$functionSignature'> & { $tsType: 'method' }>
+    methods?: Record<string, RequireSome<this, '$functionSignature'> & { $tsType: 'method' }>
   }
 }
