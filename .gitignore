@@ -8,26 +8,23 @@
 *.gz
 
 # Personal
-temp/
-TODO.ts
-TODO.md
-TODO.js
 .env
 .vscode
 .idea/jsLibraryMappings.xml
+todo/
 
 # Built
-built
+generator.stats.json
 .nyc_output
 dist
 coverage
-tsconfig.tsbuildinfo
+package-lock.json
+*.tsbuildinfo
 
 # Junk
+temp/
 .DS_Store
 tmp
-yarn.lock
-package-lock.json
 node_modules
 
 

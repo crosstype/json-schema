@@ -6,15 +6,15 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "compile": "tsc",
-    "build": "npm run clean && npm run compile",
+    "build": "yarn run clean && yarn run compile",
     "-------------": "-------------",
     "test": "jest",
     "test:coverage": "jest --collect-coverage",
-    "clean": "rimraf coverage dist && npm run clean:buildinfo",
+    "clean": "rimraf coverage dist && yarn run clean:buildinfo",
     "clean:buildinfo": "rimraf ./**/tsconfig.tsbuildinfo",
     "-------------   ": "-------------",
-    "prepublishOnly": "npm run build",
-    "preversion": "npm test && npm run build",
+    "prepublishOnly": "yarn run build",
+    "preversion": "yarn test && yarn run build",
     "version": "git add package.json"
   },
   "files": [
