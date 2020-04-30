@@ -1,17 +1,23 @@
-import { TypeOnly, validateTsExtrasDraft, validateWide } from '../schema-draft';
-// noinspection ES6PreferShortImport
+import { validateKeys, validateTsExtrasDraft, validateWide } from '../schema-draft';
 import { JsonWithExtrasWide } from '../../index';
-import { RequireSome } from '../../helpers';
+import { RequireSome, TypeOnly } from '../../helpers';
 
 
 /* ****************************************************************************************************************** */
 // Draft
 /* ****************************************************************************************************************** */
-/* Type-check the namespace against the JsonSchemaDraft interface */
-type check = validateTsExtrasDraft<typeof Draft2020_04> | validateWide<typeof Draft2020_04>
+/* Type-check the namespace */
+type check =
+  validateTsExtrasDraft<typeof TsExtras_2020_04> |
+  validateWide<typeof TsExtras_2020_04> |
+  validateKeys<
+    typeof TsExtras_2020_04,
+    typeof TsExtras_2020_04.schemaKeys[number],  // No outside keys in schemaKeys
+    keyof typeof TsExtras_2020_04.MetaSchema     // Schema has all schemaKeys
+  >
 
-export namespace Draft2020_04 {
-  export const title = 'Ts-Extras';
+export namespace TsExtras_2020_04 {
+  export const title = 'TsExtras';
   export const version = '2020_04';
   export const URI = ''; // TODO - TBD
 
@@ -44,12 +50,16 @@ export namespace Draft2020_04 {
   export const TypeParameter: TypeParameter = TypeOnly;
   export const FunctionParameter: FunctionParameter = TypeOnly;
   export const FunctionSignature: FunctionSignature = TypeOnly;
-  export const Schema: Schema = TypeOnly;
+  export const MetaSchema: MetaSchema = TypeOnly;
 
   /* ********************************************************* *
    * Schema
    * ********************************************************* */
-  export interface Schema<TDefinition = JsonWithExtrasWide.JsonDefinition> {
+  export const schemaKeys = [
+    '$functionSignature', '$heritageObjects', '$tsType', '$typeParameters', 'keyOrder', 'methods'
+  ] as const;
+
+  export interface MetaSchema<TDefinition = JsonWithExtrasWide.JsonDefinition> {
     $tsType?: TsType
 
     /**

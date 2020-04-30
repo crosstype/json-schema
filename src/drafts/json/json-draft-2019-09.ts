@@ -9,21 +9,29 @@
  *   @changed - Changed from previous Schema
  *   @new - Added from former schema
  */
-import { TypeOnly, validateJsonSchemaDraft } from '../schema-draft';
+
+import { validateJsonSchemaDraft, validateKeys, validateWide } from '../schema-draft';
 import { NullableNonArrayJsonValue } from '../../basic-json';
-import { OneOrMore } from '../../helpers';
-import { TsExtrasDrafts } from '../../index';
+import { OneOrMore, TypeOnly } from '../../helpers';
 
 
 /* ****************************************************************************************************************** *
  * Draft
  * ****************************************************************************************************************** */
-/* Type-check the namespace against the JsonSchemaDraft interface */
-type check = validateJsonSchemaDraft<typeof Draft2019_09>
 
-export namespace Draft2019_09 {
+/* Type-check the namespace */
+type check =
+  validateJsonSchemaDraft<typeof JSON_2019_09> |
+  validateWide<typeof JSON_2019_09> |
+  validateKeys<
+    typeof JSON_2019_09,
+    typeof JSON_2019_09.schemaKeys[number],  // No outside keys in schemaKeys
+    keyof typeof JSON_2019_09.JsonSchema     // Schema has all schemaKeys
+  >
+
+export namespace JSON_2019_09 {
   export const title = 'JSON';
-  export const version = '2019_09';
+  export const version = '2019-09';
   export const URI = 'http://json-schema.org/draft/2019-09/schema';
 
   export const primitiveTypeNames = [ 'string', 'number', 'integer', 'boolean', 'null' ] as const;
@@ -31,7 +39,7 @@ export namespace Draft2019_09 {
 
   export type PrimitiveTypeName = typeof primitiveTypeNames[number]
   export type TypeName = typeof typeNames[number];
-  export type JsonDefinition<TSchema = Schema> = TSchema | boolean
+  export type JsonDefinition<TSchema = JsonSchema> = TSchema | boolean
 
   /* ********************************************************* *
    * Placeholders
@@ -39,21 +47,22 @@ export namespace Draft2019_09 {
   export const PrimitiveTypeName: PrimitiveTypeName = TypeOnly;
   export const TypeName: TypeName = TypeOnly;
   export const JsonDefinition: JsonDefinition = TypeOnly;
-  export const Schema: Schema = TypeOnly;
-
+  export const JsonSchema: JsonSchema = TypeOnly;
 
   /* ********************************************************* *
    * Schema
    * ********************************************************* */
-  export namespace SchemaWithExtras {
-    export interface Draft2020_04 extends Schema, TsExtrasDrafts.Draft2020_04.Schema<JsonDefinition<Draft2020_04>> { }
-    export type Latest = Draft2020_04
 
-    export const Draft2020_04: Draft2020_04 = TypeOnly;
-    export const Latest: Latest = TypeOnly;
-  }
+  export const schemaKeys = [
+    '$id', '$anchor', '$comment', '$schema', '$vocabulary', 'format', '$defs', '$ref', '$recursiveRef', 'recursiveAnchor', 'if',
+    'then', 'else', 'allOf', 'anyOf', 'oneOf', 'not', 'type', 'enum', 'const', 'multipleOf', 'maximum', 'exclusiveMaximum', 'minimum',
+    'exclusiveMinimum', 'maxLength', 'minLength', 'pattern', 'items', 'additionalItems', 'maxItems', 'minItems', 'uniqueItems', 'contains',
+    'unevaluatedItems', 'maxContains', 'minContains', 'maxProperties', 'minProperties', 'required', 'additionalProperties', 'propertyNames',
+    'unevaluatedProperties', 'dependentRequired', 'properties', 'patternProperties', 'dependencies', 'contentMediaType', 'contentEncoding',
+    'contentSchema', 'title', 'description', 'default', 'readOnly', 'writeOnly', 'examples', 'deprecated', 'definitions', 'dependentSchemas'
+  ] as const;
 
-  export interface Schema {
+  export interface JsonSchema {
     /**
      * @see https://json-schema.org/draft/2019-09/json-schema-core.html#rfc.section.8.2.2
      */

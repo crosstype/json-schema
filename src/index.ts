@@ -1,7 +1,8 @@
 import * as JsonSchemaDrafts from './drafts/json'
+import * as JsonWithExtrasDrafts from './drafts/merged'
 import * as TsExtrasDrafts from './drafts/ts-extras'
 import { JsonValue } from './basic-json';
-import { JsonWithExtrasWide } from './drafts/wide';
+import { JsonWithExtrasWide } from './wide';
 
 
 /* ****************************************************************************************************************** *
@@ -9,8 +10,10 @@ import { JsonWithExtrasWide } from './drafts/wide';
  * ****************************************************************************************************************** */
 
 export * from './basic-json'
-export * from './drafts/wide'
-export { JsonSchemaDrafts, TsExtrasDrafts }
+export * from './wide'
+export * from './drafts'
+export { JsonSchemaDrafts, TsExtrasDrafts, JsonWithExtrasDrafts }
+export * as Drafts from './drafts'
 
 
 /* ****************************************************************************************************************** *
@@ -20,24 +23,23 @@ export { JsonSchemaDrafts, TsExtrasDrafts }
 /**
  * Union of all JsonDefinition from Json Schema
  */
-export type AnyJsonDefinition = typeof JsonSchemaDrafts[keyof typeof JsonSchemaDrafts]['JsonDefinition']
+export type AnyJsonSchemaDefinition = typeof JsonSchemaDrafts[keyof typeof JsonSchemaDrafts]['JsonDefinition']
+
 /**
  * Union of all JsonDefinition from Json Schema (includes all TsExtras)
  */
-export type AnyJsonDefinitionWithExtras = Exclude<AnyJsonDefinition, AnyJsonSchema> | AnyJsonSchemaWithExtras
+export type AnyJsonWithExtrasDefinition = Exclude<AnyJsonSchemaDefinition, AnyJsonSchema> | AnyJsonWithExtrasSchema
 
 /**
  * Union of all Json Schema
  */
-export type AnyJsonSchema = { [K in keyof typeof JsonSchemaDrafts]: typeof JsonSchemaDrafts[K]['Schema'] }[keyof typeof JsonSchemaDrafts]
+export type AnyJsonSchema = { [K in keyof typeof JsonSchemaDrafts]: typeof JsonSchemaDrafts[K]['JsonSchema'] }[keyof typeof JsonSchemaDrafts]
+
 /**
  * Union of all Json Schema (includes all TsExtras)
  */
-export type AnyJsonSchemaWithExtras = {
-  [K in keyof typeof JsonSchemaDrafts]: {
-    [K2 in keyof typeof JsonSchemaDrafts[K]['SchemaWithExtras']]: typeof JsonSchemaDrafts[K]['SchemaWithExtras'][K2]
-  }[keyof typeof JsonSchemaDrafts[K]['SchemaWithExtras']]
-}[keyof typeof JsonSchemaDrafts]
+export type AnyJsonWithExtrasSchema =
+  { [K in keyof typeof JsonWithExtrasDrafts]: typeof JsonWithExtrasDrafts[K]['JsonSchema'] }[keyof typeof JsonWithExtrasDrafts]
 
 
 /* ****************************************************************************************************************** *

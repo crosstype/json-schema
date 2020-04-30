@@ -1,4 +1,4 @@
-import { JsonSchemaDrafts } from '../';
+import { JsonWithExtrasDrafts } from '../';
 
 // TODO - Add heritage examples
 
@@ -21,7 +21,7 @@ export class ABC<G extends string> {
  * Schema
  * ****************************************************************************************************************** */
 
-const SchemaResult: JsonSchemaDrafts.Latest.SchemaWithExtras.Latest = {
+const SchemaResult: JsonWithExtrasDrafts.JSON_Latest_TsExtras_Latest.JsonSchema = {
   '$tsType': 'class',
   '$typeParameters': {
     'G': {

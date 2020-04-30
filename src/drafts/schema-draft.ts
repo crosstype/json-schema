@@ -1,32 +1,21 @@
-import { JsonWithExtrasWide, TsExtrasDrafts } from '../index';
-import { Mutable } from '../helpers';
+import { JsonWithExtrasWide } from '../index';
 
 
 /* ****************************************************************************************************************** */
 // region: Helpers & Constants
 /* ****************************************************************************************************************** */
 
-/**
- * Serves as placeholder value for type-only based draft namespaces (allows accessing types using typeof <draft>)
- */
-export const TypeOnly: any = Symbol('Type Only (placeholder)');
-
 /* The following types are used simply to provide type-checker diagnostics if namespace violates the interface structure */
 export type validateJsonSchemaDraft<T extends JsonSchemaDraft> = T
 export type validateTsExtrasDraft<T extends TsExtrasDraft> = T
 export type validateWide<T extends Partial<typeof JsonWithExtrasWide>> = T
-
-/**
- * Merge arrays from draftSet & output proper merged array type
- */
-export function mergeArrays<T extends { [p: string]: { [p: string]: any } }, TKey extends string>(draftSet: T, key: TKey):
-  ReadonlyArray<{ [K in keyof T]: Mutable<T[K][TKey]> }[keyof T][number]>
-{
-  return Object.values(draftSet).reduce((p, draft) => {
-    p.push(...draft[key]);
-    return p;
-  }, []) as any[];
-}
+export type validateKeys<
+  T extends SchemaDraft,
+  /* No outside keys in schemaKeys */
+  TKeysOfSchemaKeys extends T extends JsonSchemaDraft ? keyof T['JsonSchema'] : keyof T['MetaSchema'],
+  /* Schema has all schemaKeys */
+  TKeysOfSchema extends TKeysOfSchemaKeys
+> = T
 
 // endregion
 
@@ -35,21 +24,18 @@ export function mergeArrays<T extends { [p: string]: { [p: string]: any } }, TKe
 // region: Base Interfaces
 /* ****************************************************************************************************************** */
 
-export interface SchemaDraft {
+export type SchemaDraft = {
   title: string
   version: string
-  URI: string
-
-  /**
-   * Type Only
-   */
-  Schema: any
+  URI: string | string[]
+  JsonSchema?: any
+  MetaSchema?: any
 }
 
 export interface JsonSchemaDraft extends SchemaDraft {
   typeNames: readonly string[]
   primitiveTypeNames: readonly string[]
-  SchemaWithExtras: Record<keyof typeof TsExtrasDrafts, any>
+  schemaKeys: readonly string[]
 
   /**
    * Type Only
@@ -57,6 +43,7 @@ export interface JsonSchemaDraft extends SchemaDraft {
   PrimitiveTypeName: string
   TypeName: string
   JsonDefinition: any
+  JsonSchema: any
 }
 
 export interface TsExtrasDraft extends SchemaDraft {
@@ -69,6 +56,7 @@ export interface TsExtrasDraft extends SchemaDraft {
   TypeParameter: object
   FunctionParameter: object
   FunctionSignature: object
+  MetaSchema: any
 }
 
 // endregion
