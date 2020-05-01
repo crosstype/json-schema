@@ -17,14 +17,16 @@ import { OneOrMore, TypeOnly } from '../../helpers';
  * ****************************************************************************************************************** */
 
 /* Type-check the namespace */
+// @formatter:off
 type check =
   validateJsonSchemaDraft<typeof JSON_7> |
   validateWide<typeof JSON_7> |
   validateKeys<
     typeof JSON_7,
-    typeof JSON_7.schemaKeys[number],  // No outside keys in schemaKeys
-    keyof typeof JSON_7.JsonSchema     // Schema has all schemaKeys
+    /* TRequiredKeys */ typeof JSON_7.schemaKeys[number],
+    /* TSchemaKeys */ keyof JSON_7.JsonSchema
   >
+// @formatter:on
 
 export namespace JSON_7 {
   export const title = 'JSON';

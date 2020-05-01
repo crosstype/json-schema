@@ -7,14 +7,16 @@ import { RequireSome, TypeOnly } from '../../helpers';
 // Draft
 /* ****************************************************************************************************************** */
 /* Type-check the namespace */
+// @formatter:off
 type check =
   validateTsExtrasDraft<typeof TsExtras_2020_04> |
   validateWide<typeof TsExtras_2020_04> |
   validateKeys<
     typeof TsExtras_2020_04,
-    typeof TsExtras_2020_04.schemaKeys[number],  // No outside keys in schemaKeys
-    keyof typeof TsExtras_2020_04.MetaSchema     // Schema has all schemaKeys
+    /* TRequiredKeys */ Exclude<typeof TsExtras_2020_04.schemaKeys[number], keyof TsExtras_2020_04.Base>,
+    /* TSchemaKeys */ Exclude<keyof TsExtras_2020_04.MetaSchema, keyof TsExtras_2020_04.Base>
   >
+// @formatter:on
 
 export namespace TsExtras_2020_04 {
   export const title = 'TsExtras';
@@ -51,6 +53,8 @@ export namespace TsExtras_2020_04 {
   export const FunctionParameter: FunctionParameter = TypeOnly;
   export const FunctionSignature: FunctionSignature = TypeOnly;
   export const MetaSchema: MetaSchema = TypeOnly;
+  /* @internal */
+  export const Base: Base = TypeOnly;
 
   /* ********************************************************* *
    * Schema
@@ -59,7 +63,15 @@ export namespace TsExtras_2020_04 {
     '$functionSignature', '$heritageObjects', '$tsType', '$typeParameters', 'keyOrder', 'methods'
   ] as const;
 
-  export interface MetaSchema<TDefinition = JsonWithExtrasWide.JsonDefinition> {
+  /* @internal */
+  export interface Base {
+    $ref?: string
+  }
+
+  export interface MetaSchema<TDefinition = JsonWithExtrasWide.JsonDefinition> extends Base {
+    /**
+     * TypeScript originating Type ('interface' | 'class' | 'type' | 'function' | 'method')
+     */
     $tsType?: TsType
 
     /**
@@ -67,7 +79,7 @@ export namespace TsExtras_2020_04 {
      * Valid for:
      *   $tsType: 'interface' | 'class'
      */
-    $heritageObjects?: Array<Partial<this>>
+    $heritageObjects?: Array<RequireSome<Partial<this>, '$ref'>>
 
     /**
      * Values make use of and $extends, default, supplied value is in value root
@@ -97,6 +109,6 @@ export namespace TsExtras_2020_04 {
      *   $tsType: 'interface' | 'class'
      *   type: 'object'
      */
-    methods?: Record<string, RequireSome<this, '$functionSignature'> & { $tsType: 'method' }>
+    methods?: Record<string, RequireSome<Partial<this>, '$functionSignature'> & { $tsType: 'method' }>
   }
 }

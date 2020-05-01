@@ -12,14 +12,16 @@ import { mergeDraftArrays, TypeOnly } from '../../helpers';
  * Draft
  * ****************************************************************************************************************** */
 /* Type-check the namespace */
+// @formatter:off
 type check =
   validateJsonSchemaDraft<typeof JSON_2019_09_TsExtras_2020_04> |
   validateWide<typeof JSON_2019_09_TsExtras_2020_04> |
   validateKeys<
     typeof JSON_2019_09_TsExtras_2020_04,
-    typeof JSON_2019_09_TsExtras_2020_04.schemaKeys[number],  // No outside keys in schemaKeys
-    keyof typeof JSON_2019_09_TsExtras_2020_04.JsonSchema     // Schema has all schemaKeys
+    /* TRequiredKeys */ typeof JSON_2019_09_TsExtras_2020_04.schemaKeys[number],
+    /* TSchemaKeys */ keyof JSON_2019_09_TsExtras_2020_04.JsonSchema
   >
+// @formatter:on
 
 export namespace JSON_2019_09_TsExtras_2020_04 {
   export const title = 'JSON + TsExtras';

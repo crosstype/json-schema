@@ -4,6 +4,7 @@ import { JsonWithExtrasWide } from '../index';
 /* ****************************************************************************************************************** */
 // region: Helpers & Constants
 /* ****************************************************************************************************************** */
+// @formatter:off
 
 /* The following types are used simply to provide type-checker diagnostics if namespace violates the interface structure */
 export type validateJsonSchemaDraft<T extends JsonSchemaDraft> = T
@@ -12,11 +13,12 @@ export type validateWide<T extends Partial<typeof JsonWithExtrasWide>> = T
 export type validateKeys<
   T extends SchemaDraft,
   /* No outside keys in schemaKeys */
-  TKeysOfSchemaKeys extends T extends JsonSchemaDraft ? keyof T['JsonSchema'] : keyof T['MetaSchema'],
+  TRequiredKeys extends T extends JsonSchemaDraft ? keyof T['JsonSchema'] : keyof T['MetaSchema'],
   /* Schema has all schemaKeys */
-  TKeysOfSchema extends TKeysOfSchemaKeys
+  TSchemaKeys extends TRequiredKeys
 > = T
 
+// @formatter:on
 // endregion
 
 
