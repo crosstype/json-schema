@@ -13,7 +13,7 @@ export * from './basic-json'
 export * from './wide'
 export * from './drafts'
 export { JsonSchemaDrafts, TsExtrasDrafts, JsonWithExtrasDrafts }
-export * as Drafts from './drafts'
+export * as SchemaDrafts from './schema-drafts'
 
 
 /* ****************************************************************************************************************** *
