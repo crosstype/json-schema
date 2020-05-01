@@ -34,9 +34,9 @@ export namespace JsonWithExtrasWide {
     { [K in keyof typeof JsonWithExtrasDrafts]: (typeof JsonWithExtrasDrafts)[K]['JsonDefinition'] }[keyof typeof JsonWithExtrasDrafts]
 
   /* Placeholders */
-  export const PrimitiveTypeName = JsonSchemaWide.PrimitiveTypeName;
-  export const TypeName = JsonSchemaWide.TypeName;
-  export const JsonDefinition = JsonSchemaWide.JsonDefinition;
+  export const PrimitiveTypeName: PrimitiveTypeName = TypeOnly;
+  export const TypeName: TypeName = TypeOnly;
+  export const JsonDefinition: JsonDefinition = TypeOnly;
 
   // endregion
 
