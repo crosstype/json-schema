@@ -1,6 +1,6 @@
 import { validateKeys, validateTsExtrasDraft, validateWide } from '../schema-draft';
 import { JsonWithExtrasWide } from '../../index';
-import { RequireSome, TypeOnly } from '../../helpers';
+import { OneOrMore, RequireSome, TypeOnly } from '../../helpers';
 
 
 /* ****************************************************************************************************************** */
@@ -23,7 +23,10 @@ export namespace TsExtras_2020_04 {
   export const version = '2020_04';
   export const URI = ''; // TODO - TBD
 
-  export const tsTypes = [ 'interface', 'class', 'type', 'function', 'method' ] as const;
+  /**
+   * Root TypeScript definition types
+   */
+  export const tsTypes = [ 'interface', 'class', 'type', 'function', 'enum' ] as const;
   export type TsType = typeof tsTypes[number];
 
   export interface TypeParameter<TDefinition = JsonWithExtrasWide.JsonDefinition> {
@@ -39,6 +42,7 @@ export namespace TsExtras_2020_04 {
   }
 
   export interface FunctionSignature<TDefinition = JsonWithExtrasWide.JsonDefinition> {
+    $typeParameters?: MetaSchema<TDefinition>['$typeParameters']
     name?: string
     parameters?: Array<FunctionParameter<TDefinition>>
     returnType?: TDefinition
@@ -60,7 +64,8 @@ export namespace TsExtras_2020_04 {
    * Schema
    * ********************************************************* */
   export const schemaKeys = [
-    '$functionSignature', '$heritageObjects', '$tsType', '$typeParameters', 'keyOrder', 'methods'
+    '$functionSignature', '$callSignature', '$constructSignature', '$heritageObjects', '$tsType', '$typeParameters',
+    'keyOrder', 'methods', 'enumKeys'
   ] as const;
 
   /* @internal */
@@ -70,12 +75,13 @@ export namespace TsExtras_2020_04 {
 
   export interface MetaSchema<TDefinition = JsonWithExtrasWide.JsonDefinition> extends Base {
     /**
-     * TypeScript originating Type ('interface' | 'class' | 'type' | 'function' | 'method')
+     * Definition type
+     * Note: Can be an array in the case of declaration merging (ie. [ 'interface', 'class' ])
      */
-    $tsType?: TsType
+    $tsType?: OneOrMore<TsType>
 
     /**
-     * Array of references
+     * Array of references (represents 'extends' and 'implements' heritage objects)
      * Valid for:
      *   $tsType: 'interface' | 'class'
      */
@@ -84,16 +90,34 @@ export namespace TsExtras_2020_04 {
     /**
      * Values make use of and $extends, default, supplied value is in value root
      * Valid for:
-     *   $tsType: 'interface' | 'class' | 'type' | 'function' | 'method'
+     *   $tsType: 'interface' | 'class' | 'type'
+     *   $callSignature
+     *   $constructSignature
+     *   $functionSignature
+     *   methods -> signature
      */
     $typeParameters?: Record<string, TypeParameter<TDefinition>>
 
     /**
-     * Function signature
+     * Function signature(s)
      * Valid for:
-     *   $tsType: 'function' | 'method'
+     *   $tsType: 'function'
      */
-    $functionSignature?: FunctionSignature<TDefinition>
+    $functionSignature?: OneOrMore<FunctionSignature<TDefinition>>
+
+    /**
+     * Function call signature(s) (specified in type/interface)
+     * Valid for:
+     *   $tsType: 'interface' | 'type'
+     */
+    $callSignature?: OneOrMore<Exclude<FunctionSignature<TDefinition>, 'name'>>
+
+    /**
+     * Construct signature(s) (ie. new (): T)
+     * Valid for:
+     *   $tsType: 'interface' | 'type' | 'class'
+     */
+    $constructSignature?: OneOrMore<Exclude<FunctionSignature<TDefinition>, 'name'>>
 
     /**
      * Order of keys (properties & methods) in object
@@ -104,11 +128,18 @@ export namespace TsExtras_2020_04 {
     keyOrder?: string[]
 
     /**
+     * Enum value key names
+     * Valid for:
+     *   type: 'enum'
+     */
+    enumKeys?: string[]
+
+    /**
      *
      * Valid for:
      *   $tsType: 'interface' | 'class'
      *   type: 'object'
      */
-    methods?: Record<string, RequireSome<Partial<this>, '$functionSignature'> & { $tsType: 'method' }>
+    methods?: Record<string, { signature: OneOrMore<RequireSome<FunctionSignature<TDefinition>, 'name'>> }>
   }
 }
